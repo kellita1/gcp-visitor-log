@@ -39,7 +39,8 @@ async function initDB() {
 
     // In Production (or if configured), try to fetch from Secret Manager
     // NOTE: In a real scenario, you'd use the full resource path or just the secret name if the accessor is set up right
-    const secretPassword = await getSecret('DB_PASSWORD');
+    // FIX: Using full resource path for deployment
+    const secretPassword = await getSecret('projects/mygcpproject-481000/secrets/DB_PASSWORD/versions/latest');
     if (secretPassword) {
         dbPassword = secretPassword;
         console.log("Successfully fetched DB_PASSWORD from Secret Manager");
