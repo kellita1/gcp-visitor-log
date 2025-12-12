@@ -35,15 +35,21 @@ let pool = null;
 
 async function initDB() {
     // Attempt to get DB password from Secret Manager (Assignment Requirement)
-    // Replace 'projects/YOUR_PROJECT_ID/secrets/DB_PASSWORD/versions/latest' with real path
-    // For this assignment code, we'll try to read env var first, usually set in app.yaml or standard env
-    
-    // NOTE: For the assignment implementation, we provide a robust setup.
-    // If running LOCALLY without GCP credentials, this might fail, so we catch it.
-    
+    let dbPassword = process.env.DB_PASSWORD || 'password';
+
+    // In Production (or if configured), try to fetch from Secret Manager
+    // NOTE: In a real scenario, you'd use the full resource path or just the secret name if the accessor is set up right
+    const secretPassword = await getSecret('DB_PASSWORD');
+    if (secretPassword) {
+        dbPassword = secretPassword;
+        console.log("Successfully fetched DB_PASSWORD from Secret Manager");
+    } else {
+        console.log("Using local/fallback DB_PASSWORD");
+    }
+
     const dbConfig = {
         user: process.env.DB_USER || 'postgres',
-        password: process.env.DB_PASSWORD || 'password', // Ensure to set this in Secret Manager!
+        password: dbPassword,
         database: process.env.DB_NAME || 'visitor_log',
     };
 
@@ -57,7 +63,7 @@ async function initDB() {
     }
 
     pool = new Pool(dbConfig);
-    
+
     // Create Table if not exists
     try {
         await pool.query(`

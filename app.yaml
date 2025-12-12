@@ -7,6 +7,10 @@ env_variables:
   # or be overridden in the App Engine dashboard.
   NODE_ENV: 'production'
   PORT: '8080'
+  DB_USER: 'postgres'
+  DB_NAME: 'visitor_log'
+  # Connection Name from: gcloud sql instances describe visitor-db
+  INSTANCE_CONNECTION_NAME: 'mygcpproject-481000:europe-west2:visitor-db'
 
 handlers:
   - url: /static
