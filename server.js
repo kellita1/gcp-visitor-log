@@ -42,7 +42,7 @@ async function initDB() {
     // FIX: Using full resource path for deployment
     const secretPassword = await getSecret('projects/mygcpproject-481000/secrets/DB_PASSWORD/versions/latest');
     if (secretPassword) {
-        dbPassword = secretPassword;
+        dbConfig.password = secretPassword;
         console.log("Successfully fetched DB_PASSWORD from Secret Manager");
     } else {
         console.log("Using local/fallback DB_PASSWORD");
