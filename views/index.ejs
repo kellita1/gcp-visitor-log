@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Visitor Log</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Visitor Log</h1>
+            <p class="subtitle">A Cloud-Native Node.js Application on GCP</p>
+        </header>
+
+        <% if (error) { %>
+            <div class="error-banner">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form class="guestbook-form" action="/sign" method="POST">
+            <input type="text" name="name" placeholder="Your Name" required autocomplete="off">
+            <textarea name="message" rows="3" placeholder="Leave a message..." required></textarea>
+            <button type="submit">Sign Guestbook</button>
+        </form>
+
+        <div class="visitor-list">
+            <% if (visitors.length === 0) { %>
+                <div style="text-align: center; color: #64748b; padding: 20px;">
+                    No visitors yet. Be the first!
+                </div>
+            <% } %>
+
+            <% visitors.forEach(visitor => { %>
+                <div class="visitor-card">
+                    <div class="visitor-header">
+                        <span class="visitor-name"><%= visitor.name %></span>
+                        <span class="visitor-time">
+                            <%= new Date(visitor.created_at).toLocaleDateString() %>
+                        </span>
+                    </div>
+                    <p class="visitor-message"><%= visitor.message %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</body>
+</html>
